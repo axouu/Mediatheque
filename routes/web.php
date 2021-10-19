@@ -20,5 +20,9 @@ Route::get('/', function () {
 });
 Route::get('/employee', [EmployeeController::class, 'home']);
 Route::post('/employee', [EmployeeController::class, 'create']);
-Route::post('/user', [UserController::class, 'create']);
-Route::get('/user/{id}', [UserController::class, 'verify']);
+Route::post('/register', [UserController::class, 'create']);
+Route::delete('/logout', [UserController::class, 'logout']);
+Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
+    Route::post('/login', [EmployeeController::class, 'login']);
+    Route::post('/user/{id}', [EmployeeController::class, 'verify']);
+});

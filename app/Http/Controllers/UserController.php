@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -29,9 +30,30 @@ class UserController extends Controller {
         return $user;
     }
 
-    public function verify(int $id) {
-        $user = User::where('id', $id)->firstOrFail();
-        DB::update()
-        return $user;
+    public function login(Request $request) {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            if(User::where('email', $request->input('email'))->firstOrfail()->verified) {
+                $request->session()->regenerate();
+
+                return redirect()->intended('dashboard');
+            }
+            return redirect()->intended('unverified');
+        }
+        return back()->withErrors($credentials);
+    }
+
+    public function logout(Request $request) {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

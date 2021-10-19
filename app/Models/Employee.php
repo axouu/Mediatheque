@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Employee extends Model {
-    use HasFactory;
+class Employee extends Authenticatable {
+    use Notifiable;
+    protected $guard = 'admin';
 
     protected $fillable = [
         'email',
@@ -14,6 +16,7 @@ class Employee extends Model {
     ];
 
     protected $hidden = [
-        'password'
+        'password',
+        'remember_token'
     ];
 }
