@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller {
 
-    public function login(Request $request) {
+    public function home() {
+        $books = Book::with('user')->get();
+        $users = User::where('verified', false)->get();
+        return view('dashboard', [$books, $users]);
+    }
+
+    public function login(Request $request): RedirectResponse{
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required']
@@ -37,23 +44,18 @@ class EmployeeController extends Controller {
             return back()->withErrors($validator);
         } else {
             try {
-                DB::table('employee')->insert([
+                DB::table('employees')->insert([
                     'email' => $request->input('email'),
                     'password' => bcrypt($request->input('password'))
                 ]);
             } catch(\Exception $e) {
-                return $e->getMessage();
+                return back()->withErrors(['email' => 'Compte existant']);
             }
         }
         return $employee;
     }
 
-    public function show($id) {
-        $employee = DB::table('employee')->find($id);
-        return view('showEmployee', $employee);
-    }
-
-    public function verify(int $id) {
+    public function verify(int $id) : RedirectResponse {
         if (Auth::guard('admin')->check()) {
             $user = User::where('id', $id)->firstOrFail();
             $user->verified = true;
@@ -61,5 +63,16 @@ class EmployeeController extends Controller {
             return back();
         }
         return redirect()->intended('dashboard');
+    }
+
+    public function restore(Request $request) : RedirectResponse {
+        if (Auth::guard('admin')->check()) {
+            $book = Book::where('id', $request->input('book_id'))->firstOrFail();
+            $book->user()->dissociate();
+            $book->save();
+            $this->load('books');
+            $this->load('users');
+        }
+        return redirect()->intended('/');
     }
 }

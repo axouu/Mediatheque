@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -9,6 +11,10 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 
 class UserController extends Controller {
+
+    public function loginView() {
+        return view('login');
+    }
 
     public function create(Request $request) {
         $user = $request->all();
@@ -30,7 +36,7 @@ class UserController extends Controller {
         return $user;
     }
 
-    public function login(Request $request) {
+    public function login(Request $request) : RedirectResponse {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required']
@@ -56,4 +62,16 @@ class UserController extends Controller {
 
         return redirect('/');
     }
+
+    public function borrow($id): RedirectResponse {
+        if (Auth::check()) {
+            $user_id = Auth::id();
+            $user = User::where('id', $user_id)->firstOrFail();
+            $book = Book::where('id', $id)->firstOrFail();
+            $user->books()->save($book, ['borrowed_at', date("Y-m-d H:i:s")]);
+            return redirect()->intended('books');
+        }
+        return redirect()->intended('login');
+    }
+
 }
