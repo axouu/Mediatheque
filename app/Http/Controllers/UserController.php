@@ -57,10 +57,9 @@ class UserController extends Controller {
         Auth::logout();
 
         $request->session()->invalidate();
+        $request->session()->regenerate();
 
-        $request->session()->regenerateToken();
-
-        return redirect('/');
+        return redirect()->intended('/');
     }
 
     public function borrow($id): RedirectResponse {
@@ -69,7 +68,7 @@ class UserController extends Controller {
             $user = User::where('id', $user_id)->firstOrFail();
             $book = Book::where('id', $id)->firstOrFail();
             $user->books()->save($book, ['borrowed_at', date("Y-m-d H:i:s")]);
-            return redirect()->intended('books');
+            return redirect()->route('welcome');
         }
         return redirect()->intended('login');
     }
