@@ -40,6 +40,6 @@ class User extends Authenticatable
      * @return HasMany
      */
     public function books(): HasMany {
-        return $this->hasMany(Book::class, 'foreign_key', 'local_key')->withPivot('borrowed_at');
+        return $this->hasMany(Book::class)->withPivot(['borrowed_at', 'confirmed']);
     }
 }

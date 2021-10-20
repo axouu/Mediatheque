@@ -41,20 +41,24 @@ class UserController extends Controller {
             'email' => ['required', 'email'],
             'password' => ['required']
         ]);
-
+        $user = User::where('email', $request->input('email'))->first();
+        if (!is_null($user) && !$user->verified) {
+            return back()->with('message', 'Utilisateur non vérifié');
+        }
         if (Auth::attempt($credentials)) {
-            if(User::where('email', $request->input('email'))->firstOrfail()->verified) {
-                $request->session()->regenerate();
+            $request->session()->regenerate();
 
-                return redirect()->intended('dashboard');
-            }
-            return redirect()->intended('unverified');
+            return redirect()->intended('/');
         }
         return back()->withErrors($credentials);
     }
 
     public function logout(Request $request) {
-        Auth::logout();
+        if (Auth::guard('admin')->check()) {
+            Auth::guard('admin')->logout();
+        } else {
+            Auth::logout();
+        }
 
         $request->session()->invalidate();
         $request->session()->regenerate();
@@ -65,10 +69,13 @@ class UserController extends Controller {
     public function borrow($id): RedirectResponse {
         if (Auth::check()) {
             $user_id = Auth::id();
-            $user = User::where('id', $user_id)->firstOrFail();
-            $book = Book::where('id', $id)->firstOrFail();
+            $user = User::where('id', $user_id)->first();
+            $book = Book::where('id', $id)->first();
+            if (is_null($user) || is_null($book)) {
+                return back()->with('message', 'Livre ou utilisateur non trouvé');
+            }
             $user->books()->save($book, ['borrowed_at', date("Y-m-d H:i:s")]);
-            return redirect()->route('welcome');
+            return redirect()->intended('/');
         }
         return redirect()->intended('login');
     }

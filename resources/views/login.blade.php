@@ -3,21 +3,51 @@
 @section('title', 'Connexion')
 
 @section('content')
-    <form method="POST" action="/admin/login">
-        @csrf
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input name="password" type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1" name="remember">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <div style="text-align: center">
+        <h2>Se connecter</h2>
+    </div>
+    <div class="mx-5 my-2">
+        <form method="POST" action="/admin/login" id="loginForm">
+            <div class="row mx-2">
+                <div class="form-check col-2">
+                    <input class="form-check-input" type="radio" name="userRole" id="radioEmployee" value="1">
+                    <label class="form-check-label" for="radioEmployee">
+                        Utilisateur
+                    </label>
+                </div>
+                <div class="form-check col-2">
+                    <input class="form-check-input" type="radio" name="userRole" id="radioUser" checked value="2">
+                    <label class="form-check-label" for="radioUser">
+                        Employé
+                    </label>
+                </div>
+            </div>
+            @csrf
+            <div class="mb-3">
+                <label for="emailInput" class="form-label">Adresse Mail</label>
+                <input name="email" type="email" class="form-control" id="emailInput">
+            </div>
+            <div class="mb-3">
+                <label for="passwordInput" class="form-label">Mot de passe</label>
+                <input name="password" type="password" class="form-control" id="passwordInput">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="rememberCheck" name="remember">
+                <label class="form-check-label" for="rememberCheck">Se souvenir de moi</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Se connecter</button>
+        </form>
+    </div>
+    <script>
+        $('input:radio[name="userRole"]').change(function () {
+            console.log($(this).val());
+            if ($(this).val() === '1') {
+                $("#loginForm").attr('action', '/login');
+            } else if ($(this).val() === '2') {
+                $("#loginForm").attr('action', '/admin/login');
+            } else {
+                console.log("error, wrong value :", $(this).val());
+            }
+        });
+    </script>
 @endsection

@@ -27,11 +27,10 @@ Route::post('/borrow/{id}', [UserController::class, 'borrow']);
 Route::post('/login', [UserController::class, 'login']);
 Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
     Route::get('/dashboard', [EmployeeController::class, 'home'])->name('dashboard');
-// Emprunts & users sur le dashboard
 
     Route::post('/register', [EmployeeController::class, 'create']);
     Route::post('/login', [EmployeeController::class, 'login']);
-    Route::post('/user/{id}', [EmployeeController::class, 'verify']);
+    Route::post('/verify/{id}', [EmployeeController::class, 'verify']);
     Route::post('/restore', [EmployeeController::class, 'restore']);
 });
 

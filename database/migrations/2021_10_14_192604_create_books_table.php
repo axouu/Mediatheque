@@ -21,6 +21,11 @@ class CreateBooksTable extends Migration
             $table->string('description');
             $table->string('author');
             $table->string('genre');
+            $table->bigInteger('user_id')->unsigned()->nullable();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users');
             $table->timestamps();
         });
     }

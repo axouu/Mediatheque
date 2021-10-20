@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,7 +15,10 @@ class EmployeeController extends Controller {
     public function home() {
         $books = Book::has('user')->get();
         $users = User::where('verified', false)->get();
-        return view('dashboard', [$books, $users]);
+        return view('dashboard', [
+            'books' => $books,
+            'users' => $users
+        ]);
     }
 
     public function login(Request $request): RedirectResponse{
@@ -26,7 +28,6 @@ class EmployeeController extends Controller {
         ]);
 
         if (Auth::guard('admin')->attempt($credentials, true)) {
-            Auth::login(Employee::where('email', $request->get("email"))->first());
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
@@ -60,19 +61,19 @@ class EmployeeController extends Controller {
         if (Auth::guard('admin')->check()) {
             $user = User::where('id', $id)->firstOrFail();
             $user->verified = true;
-            Auth::guard('admin')->$user->save();
-            return back();
+            $user->save();
         }
-        return redirect()->intended('dashboard');
+        return back();
     }
 
     public function restore(Request $request) : RedirectResponse {
         if (Auth::guard('admin')->check()) {
-            $book = Book::where('id', $request->input('book_id'))->firstOrFail();
+            $book = Book::where('id', $request->input('book_id'))->first();
+            if (is_null($book)) {
+                return redirect()->intended('/');
+            }
             $book->user()->dissociate();
             $book->save();
-            $this->load('books');
-            $this->load('users');
         }
         return redirect()->intended('/');
     }
