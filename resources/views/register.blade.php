@@ -16,7 +16,8 @@
             </div>
             <div class="mb-3">
                 <label for="passwordInput" class="form-label">Mot de passe</label>
-                <input name="password" type="password" class="form-control" id="passwordInput">
+                <input name="password" type="password" class="form-control" id="passwordInput" aria-describedby="password_help">
+                <div id="password_help" class="form-text">5 caractères minimum</div>
             </div>
             <div class="mb-3">
                 <label for="confirmInput" class="form-label">Confirmation du mot de passe</label>
