@@ -32,7 +32,9 @@ class UserController extends Controller {
         ];
         $validator = Validator::make($user, $rules);
         if ($validator->fails()) {
-            return back()->withErrors($validator);
+            return back()->withErrors([
+                'message' => 'Formulaire incorrect'
+            ])->withInput();
         } else {
             DB::table('users')->insert([
                 'email' => $request->input('email'),
@@ -60,7 +62,9 @@ class UserController extends Controller {
 
             return redirect()->intended('/owned');
         }
-        return back()->withErrors($credentials);
+        return back()->withErrors([
+            'message' => 'Formulaire incorrect'
+        ])->withInput();
     }
 
     public function logout(Request $request) {

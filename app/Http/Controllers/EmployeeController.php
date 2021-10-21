@@ -50,7 +50,9 @@ class EmployeeController extends Controller {
         ];
         $validator = Validator::make($employee, $rules);
         if ($validator->fails()) {
-            return back()->withErrors($validator);
+            return back()->withErrors([
+                'message' => 'Formulaire incorrect'
+            ])->withInput();
         } else {
             try {
                 DB::table('employees')->insert([
@@ -62,7 +64,7 @@ class EmployeeController extends Controller {
                     'password' => bcrypt($request->input('password'))
                 ], true);
             } catch(\Exception $e) {
-                return back()->withErrors(['email' => 'Compte existant']);
+                return back()->withErrors(['message' => 'Compte existant']);
             }
         }
         return redirect()->intended('/admin/dashboard');

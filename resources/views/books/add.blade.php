@@ -9,29 +9,31 @@
     <div class="mx-5 my-2">
         <form method="POST" action="/admin/books/add">
             @csrf
+            <p class="text-danger">{{ $errors->first('message') }}</p>
             <div class="mb-3">
                 <label for="titleInput" class="form-label">Titre</label>
-                <input name="title" type="text" class="form-control" id="titleInput">
+                <input name="title" value="{{ old('title') }}" type="text" class="form-control" id="titleInput">
             </div>
             <div class="mb-3">
                 <label for="descriptionInput" class="form-label">Description</label>
-                <textarea name="description" type="text" class="form-control" id="descriptionInput" rows="3"></textarea>
+                <textarea name="description" value="{{ old('description') }}" type="text" class="form-control" id="descriptionInput" rows="3"></textarea>
             </div>
             <div class="mb-3">
                 <label for="authorInput" class="form-label">Auteur</label>
-                <input name="author" type="text" class="form-control" id="authorInput">
+                <input name="author" value="{{ old('author') }}" type="text" class="form-control" id="authorInput">
             </div>
             <div class="mb-3">
                 <label for="coverInput" class="form-label">Url de la première de couverture</label>
-                <input name="first_cover" type="text" class="form-control" id="coverInput">
+                <input name="first_cover" value="{{ old('first_cover') }}" type="text" class="form-control" id="coverInput">
             </div>
             <div class="mb-3">
                 <label for="dateInput" class="form-label">Date de publication</label>
-                <input name="publication_date" type="text" class="form-control" id="dateInput">
+                <input name="publication_date" value="{{ old('publication_date') }}" type="text" class="form-control" id="dateInput" aria-describedby="publication_help">
+                <div id="publication_help" class="form-text">Format : AAAA-MM-JJ</div>
             </div>
             <div class="mb-3">
                 <label for="genreInput" class="form-label">Genre</label>
-                <input name="genre" type="text" class="form-control" id="genreInput">
+                <input name="genre" value="{{ old('genre') }}" type="text" class="form-control" id="genreInput">
             </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
         </form>

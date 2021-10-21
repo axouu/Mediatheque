@@ -9,6 +9,7 @@
     <div class="mx-5 my-2">
         <form method="POST" action="/admin/login" id="loginForm">
             @csrf
+            <p class="text-danger">{{ $errors->first('message') }}</p>
             <div class="row mx-2">
                 <div class="form-check col-2">
                     <input class="form-check-input" type="radio" name="userRole" id="radioEmployee" value="1">
@@ -25,7 +26,7 @@
             </div>
             <div class="mb-3">
                 <label for="emailInput" class="form-label">Adresse Mail</label>
-                <input name="email" type="email" class="form-control" id="emailInput">
+                <input name="email" type="email" class="form-control" id="emailInput" value="{{ old('email') }}">
             </div>
             <div class="mb-3">
                 <label for="passwordInput" class="form-label">Mot de passe</label>

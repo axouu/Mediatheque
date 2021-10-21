@@ -27,7 +27,6 @@ class BookController extends Controller {
     }
 
     public function add(Request $request) {
-        // TODO : only admin can add books
         $book = $request->all();
 
         $rules = [
@@ -40,7 +39,9 @@ class BookController extends Controller {
         ];
         $validator = Validator::make($book, $rules);
         if ($validator->fails()) {
-            return back()->withErrors($validator);
+            return back()->withErrors([
+                'message' => 'Formulaire incorrect'
+            ])->withInput();
         } else {
             DB::table('books')->insert([
                 'title' => $request->input('title'),
