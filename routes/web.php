@@ -27,10 +27,14 @@ Route::post('/borrow/{id}', [UserController::class, 'borrow']);
 Route::post('/login', [UserController::class, 'login']);
 Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
     Route::get('/dashboard', [EmployeeController::class, 'home'])->name('dashboard');
+    Route::get('/confirm', [EmployeeController::class, 'confirm']);
+    Route::get('/books/add', [BookController::class, 'addForm']);
 
     Route::post('/register', [EmployeeController::class, 'create']);
     Route::post('/login', [EmployeeController::class, 'login']);
+    Route::post('/books/add', [BookController::class, 'add']);
     Route::post('/verify/{id}', [EmployeeController::class, 'verify']);
+    Route::post('/confirm/{id}', [EmployeeController::class, 'confirmBorrow']);
     Route::post('/restore', [EmployeeController::class, 'restore']);
 });
 

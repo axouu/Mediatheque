@@ -8,6 +8,7 @@
     </div>
     <div class="mx-5 my-2">
         <form method="POST" action="/admin/login" id="loginForm">
+            @csrf
             <div class="row mx-2">
                 <div class="form-check col-2">
                     <input class="form-check-input" type="radio" name="userRole" id="radioEmployee" value="1">
@@ -22,7 +23,6 @@
                     </label>
                 </div>
             </div>
-            @csrf
             <div class="mb-3">
                 <label for="emailInput" class="form-label">Adresse Mail</label>
                 <input name="email" type="email" class="form-control" id="emailInput">

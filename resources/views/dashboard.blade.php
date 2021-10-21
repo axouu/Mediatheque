@@ -20,7 +20,8 @@
         <div class="col-5 ml-3">
             <h2 class="title">Livres empruntés</h2>
             @foreach($books as $book)
-                {{ $book->title }}
+                <div>{{ $book->title }} depuis le {{ $book->borrowDate }}</div>
+                <img class="cover" src="{{ $book->first_cover }}" alt="Page de couverture">
                 <form method="POST" action="/admin/restore">
                     @csrf
                     <input name="book_id" type="hidden" value="{{ $book->id }}">

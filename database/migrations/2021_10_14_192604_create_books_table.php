@@ -16,7 +16,7 @@ class CreateBooksTable extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('fist_cover');
+            $table->string('first_cover');
             $table->date('publication_date');
             $table->string('description');
             $table->string('author');
@@ -26,6 +26,8 @@ class CreateBooksTable extends Migration
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');
+            $table->boolean('confirmed')->nullable();
+            $table->timestamp('borrowDate')->nullable();
             $table->timestamps();
         });
     }

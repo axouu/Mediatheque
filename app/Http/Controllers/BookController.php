@@ -8,13 +8,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller {
-    //
+
     public function home() {
         $books = Book::all();
-        return view('books.show', $books);
+        return view('books.show', ['books' => $books]);
+    }
+
+    public function addForm() {
+        return view('books.add');
     }
 
     public function add(Request $request) {
+        // TODO : only admin can add books
         $book = $request->all();
 
         $rules = [
@@ -29,8 +34,16 @@ class BookController extends Controller {
         if ($validator->fails()) {
             return back()->withErrors($validator);
         } else {
-            DB::table('book')->insert($book);
+            DB::table('books')->insert([
+                'title' => $request->input('title'),
+                'first_cover' => $request->input('first_cover'),
+                'publication_date' => $request->input('publication_date'),
+                'description' => $request->input('description'),
+                'author' => $request->input('author'),
+                'genre' => $request->input('genre')
+            ]);
         }
-        return $book;
+        return redirect()->intended('/admin/books/add')
+            ->with('message', 'Livre ajouté');
     }
 }

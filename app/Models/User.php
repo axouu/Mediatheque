@@ -40,6 +40,6 @@ class User extends Authenticatable
      * @return HasMany
      */
     public function books(): HasMany {
-        return $this->hasMany(Book::class)->withPivot(['borrowed_at', 'confirmed']);
+        return $this->hasMany(Book::class);
     }
 }

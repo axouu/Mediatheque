@@ -13,12 +13,17 @@ use Illuminate\Support\Facades\Validator;
 class EmployeeController extends Controller {
 
     public function home() {
-        $books = Book::has('user')->get();
+        $books = Book::has('user')->where('confirmed', true)->get();
         $users = User::where('verified', false)->get();
         return view('dashboard', [
             'books' => $books,
             'users' => $users
         ]);
+    }
+
+    public function confirm() {
+        $books = Book::has('user')->where('confirmed', false)->get();
+        return view('book.confirm', ['books' => $books]);
     }
 
     public function login(Request $request): RedirectResponse{
@@ -74,6 +79,20 @@ class EmployeeController extends Controller {
             }
             $book->user()->dissociate();
             $book->save();
+            return redirect()->intended('/admin/dashboard');
+        }
+        return redirect()->intended('/');
+    }
+
+    public function confirmBorrow($id): RedirectResponse {
+        if (Auth::guard('admin')->check()) {
+            $book = Book::where('id', $id)->first();
+            if (is_null($book)) {
+                return redirect()->intended('/');
+            }
+            $book->confirmed = true;
+            $book->save();
+            return redirect()->intended('/admin/confirm');
         }
         return redirect()->intended('/');
     }

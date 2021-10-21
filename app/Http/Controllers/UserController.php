@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,9 +32,16 @@ class UserController extends Controller {
             return back()->withErrors($validator);
         } else {
             $user['password'] = bcrypt($request->input('password'));
-            DB::table('users')->insert($user);
+            DB::table('users')->insert([
+                'email' => $request->input('email'),
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'password' => $request->input('password'),
+                'address' => $request->input('address')
+            ]);
         }
-        return $user;
+        return redirect()->intended('/')
+            ->with('message', 'Compte créé veuillez attendre la validation d\'un de nos employés');
     }
 
     public function login(Request $request) : RedirectResponse {
@@ -74,10 +82,13 @@ class UserController extends Controller {
             if (is_null($user) || is_null($book)) {
                 return back()->with('message', 'Livre ou utilisateur non trouvé');
             }
-            $user->books()->save($book, ['borrowed_at', date("Y-m-d H:i:s")]);
-            return redirect()->intended('/');
+            $user->books()->save($book);
+            $book->borrowDate = Carbon::now();
+            $book->confirmed = false;
+            $book->save();
+            return redirect()->intended('/books');
         }
-        return redirect()->intended('login');
+        return redirect()->intended('/login');
     }
 
 }

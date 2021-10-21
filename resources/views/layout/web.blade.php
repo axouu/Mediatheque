@@ -24,9 +24,15 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('/admin/dashboard') }}">Dashboard</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('/admin/confirm') }}">Confirmer les emprunts</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('/admin/books/add') }}">Ajouter un livre</a>
+                                </li>
                             @elseif(Auth::check())
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/books') }}">
                                     Livres
                                 </a>
                             </li>
@@ -40,6 +46,8 @@
                         </form>
                     @else
                         <div class="ml-auto">
+                            <a role="button" href="{{ url('/login') }}" class="btn btn-primary">S'inscrire</a>
+                            <!-- TODO : dropdown -->
                             <a role="button" href="{{ url('/login') }}" class="btn btn-primary">Se connecter</a>
                         </div>
                     @endif
@@ -57,6 +65,10 @@
 <style>
     .title {
         text-align: center;
+    }
+
+    .cover {
+        max-height: 300px;
     }
 </style>
 </html>
