@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Employee;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -56,11 +57,15 @@ class EmployeeController extends Controller {
                     'email' => $request->input('email'),
                     'password' => bcrypt($request->input('password'))
                 ]);
+                Auth::guard('admin')->attempt([
+                    'email' => $request->input('email'),
+                    'password' => bcrypt($request->input('password'))
+                ], true);
             } catch(\Exception $e) {
                 return back()->withErrors(['email' => 'Compte existant']);
             }
         }
-        return $employee;
+        return redirect()->intended('/admin/dashboard');
     }
 
     public function verify(int $id) : RedirectResponse {
