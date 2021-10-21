@@ -3,9 +3,17 @@
 @section('title', 'Accueil')
 
 @section('content')
-    <p>
-        Bonjour à tous
-    </p>
+    <div class="title">
+        <h2 class="title">Livres disponibles</h2>
+    </div>
+    <div class="row mx-3 mb-3 justify-content-around">
+        @foreach($books as $book)
+            <div class="col-3 mx-3">
+                <div>{{ $book->title }}</div>
+                <img class="cover" src="{{ $book->first_cover }}" alt="Page de couverture">
+            </div>
+        @endforeach
+    </div>
     @if(Session::has('message'))
         <div class="toast align-items-center text-white bg-success bottom-0 start-0 position-absolute"
              role="alert"

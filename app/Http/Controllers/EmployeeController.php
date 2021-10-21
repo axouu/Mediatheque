@@ -36,7 +36,7 @@ class EmployeeController extends Controller {
 
         if (Auth::guard('admin')->attempt($credentials, true)) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->intended('/admin/dashboard');
         }
         return back()->withInput($request->only('email', 'remember'));
     }
@@ -81,7 +81,7 @@ class EmployeeController extends Controller {
         if (Auth::guard('admin')->check()) {
             $book = Book::where('id', $request->input('book_id'))->first();
             if (is_null($book)) {
-                return redirect()->intended('/');
+                return redirect()->intended('/admin/dashboard');
             }
             $book->user()->dissociate();
             $book->borrowDate = null;
@@ -89,20 +89,19 @@ class EmployeeController extends Controller {
             $book->save();
             return redirect()->intended('/admin/dashboard');
         }
-        return redirect()->intended('/');
+        return redirect()->intended('/admin/dashboard');
     }
 
     public function confirmBorrow($id): RedirectResponse {
         if (Auth::guard('admin')->check()) {
             $book = Book::where('id', $id)->first();
             if (is_null($book)) {
-                return redirect()->intended('/');
+                return redirect()->intended('/admin/confirm');
             }
             $book->borrowDate = Carbon::now();
             $book->confirmed = true;
             $book->save();
-            return redirect()->intended('/admin/confirm');
         }
-        return redirect()->intended('/');
+        return redirect()->intended('/admin/confirm');
     }
 }
