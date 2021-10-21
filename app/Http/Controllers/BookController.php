@@ -33,7 +33,7 @@ class BookController extends Controller {
             'title' => 'required|max:255',
             'first_cover' => 'required|max:255',
             'publication_date' => 'required|max:255',
-            'description' => 'required|max:500',
+            'description' => 'required|max:2000',
             'author' => 'required|max:255',
             'genre' => 'required|max:255'
         ];

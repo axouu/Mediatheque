@@ -36,6 +36,11 @@ class UserController extends Controller {
                 'message' => 'Formulaire incorrect'
             ])->withInput();
         } else {
+            if (!is_null(User::where('email', $request->input('email'))->first())) {
+                return back()->withErrors([
+                    'message' => 'Utilisateur avec le même email existant'
+                ])->withInput();
+            }
             DB::table('users')->insert([
                 'email' => $request->input('email'),
                 'firstname' => $request->input('firstname'),
