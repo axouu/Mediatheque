@@ -15,7 +15,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-5 mr-2">
+                                    <div class="col-8 mr-2">
                                         {{ $user->firstname }} {{ $user->lastname }}
                                         <br>
                                         {{ $user->address }}
