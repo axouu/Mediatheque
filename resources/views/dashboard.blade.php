@@ -15,14 +15,14 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-8 mr-2">
+                                    <div class="col-7 mr-1">
                                         {{ $user->firstname }} {{ $user->lastname }}
                                         <br>
                                         {{ $user->address }}
                                         <br>
                                         {{ $user->email }}
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <form method="POST" action="/admin/verify/{{ $user->id }}">
                                             @csrf
                                             <button class="btn btn-success" type="submit">Accepter</button>
