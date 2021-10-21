@@ -7,15 +7,33 @@
         <h2 class="title">Tableau de bord</h2>
     </div>
     <div class="row mx-3 mb-3 justify-content-around">
-        <div class="col-5 ml-2">
-            <h2>Utilisateurs en attente</h2>
-            @foreach($users as $user)
-                {{ $user->firstname }}
-                <form method="POST" action="/admin/verify/{{ $user->id }}">
-                    @csrf
-                    <button class="btn btn-success" type="submit">Accepter</button>
-                </form>
-            @endforeach
+        <div class="col-6 ml-2">
+            <h2 class="title">Utilisateurs en attente</h2>
+            <div class="row">
+                @foreach($users as $user)
+                    <div class="col-5 mx-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-5 mr-2">
+                                        {{ $user->firstname }} {{ $user->lastname }}
+                                        <br>
+                                        {{ $user->address }}
+                                        <br>
+                                        {{ $user->email }}
+                                    </div>
+                                    <div class="col-3">
+                                        <form method="POST" action="/admin/verify/{{ $user->id }}">
+                                            @csrf
+                                            <button class="btn btn-success" type="submit">Accepter</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </div>
         <div class="col-5 ml-3">
             <h2 class="title">Livres empruntés</h2>

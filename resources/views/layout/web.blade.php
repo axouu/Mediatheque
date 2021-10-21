@@ -31,11 +31,16 @@
                                     <a class="nav-link" href="{{ url('/admin/books/add') }}">Ajouter un livre</a>
                                 </li>
                             @elseif(Auth::check())
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/books') }}">
-                                    Livres
-                                </a>
-                            </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('/books') }}">
+                                        Livres
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('/owned') }}">
+                                        Mes emprunts
+                                    </a>
+                                </li>
                             @endif
                         </ul>
                     @if(Auth::guard('admin')->check() || Auth::check())
@@ -45,18 +50,23 @@
                             <button class="btn btn-danger" type="submit" id="logout-btn">Se déconnecter</button>
                         </form>
                     @else
-                        <div class="ml-auto">
-                            <a role="button" href="{{ url('/login') }}" class="btn btn-primary">S'inscrire</a>
-                            <!-- TODO : dropdown -->
-                            <a role="button" href="{{ url('/login') }}" class="btn btn-primary">Se connecter</a>
+                        <div class="row">
+                            <div class="dropdown col">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="registerDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    S'inscrire
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="registerDropdown">
+                                    <li><a class="dropdown-item" href="{{ url('/register?type=employee') }}">Employé</a></li>
+                                    <li><a class="dropdown-item" href="{{ url('/register?type=user') }}">Habitant</a></li>
+                                </ul>
+                            </div>
+                            <a role="button" href="{{ url('/login') }}" class="btn btn-primary col">Se connecter</a>
                         </div>
                     @endif
                 </div>
             </div>
         </nav>
         @yield('content')
-        {{ Auth::guard('admin')->user() }}
-        {{ Auth::user() }}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
                 crossorigin="anonymous">

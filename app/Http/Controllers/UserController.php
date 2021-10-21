@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use App\Models\User;
 
 class UserController extends Controller {
 
     public function loginView() {
         return view('login');
+    }
+
+    public function registerForm() {
+        return view('register');
     }
 
     public function create(Request $request) {
@@ -31,17 +34,16 @@ class UserController extends Controller {
         if ($validator->fails()) {
             return back()->withErrors($validator);
         } else {
-            $user['password'] = bcrypt($request->input('password'));
             DB::table('users')->insert([
                 'email' => $request->input('email'),
                 'firstname' => $request->input('firstname'),
                 'lastname' => $request->input('lastname'),
-                'password' => $request->input('password'),
+                'password' => bcrypt($request->input('password')),
                 'address' => $request->input('address')
             ]);
         }
         return redirect()->intended('/')
-            ->with('message', 'Compte créé veuillez attendre la validation d\'un de nos employés');
+            ->with('message', 'Compte créé, veuillez attendre la validation d\'un de nos employés');
     }
 
     public function login(Request $request) : RedirectResponse {
@@ -76,14 +78,12 @@ class UserController extends Controller {
 
     public function borrow($id): RedirectResponse {
         if (Auth::check()) {
-            $user_id = Auth::id();
-            $user = User::where('id', $user_id)->first();
+            $user = Auth::user();
             $book = Book::where('id', $id)->first();
-            if (is_null($user) || is_null($book)) {
-                return back()->with('message', 'Livre ou utilisateur non trouvé');
+            if (is_null($book)) {
+                return back()->with('message', 'Livre non trouvé');
             }
             $user->books()->save($book);
-            $book->borrowDate = Carbon::now();
             $book->confirmed = false;
             $book->save();
             return redirect()->intended('/books');

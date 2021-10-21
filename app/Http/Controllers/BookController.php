@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,6 +17,13 @@ class BookController extends Controller {
 
     public function addForm() {
         return view('books.add');
+    }
+
+    public function owned() {
+        $books = Book::where('user_id', Auth::id())->get();
+        return view('books.owned', [
+            'books'=> $books
+        ]);
     }
 
     public function add(Request $request) {

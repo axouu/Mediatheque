@@ -21,6 +21,8 @@ Route::get('/', function () {
 })->name('welcome');
 Route::get('/login', [UserController::class, 'loginView'])->name('login');
 Route::get('/books', [BookController::class, 'home'])->name('books');
+Route::get('/register', [UserController::class, 'registerForm']);
+Route::get('/owned', [BookController::class, 'owned']);
 
 Route::post('/register', [UserController::class, 'create']);
 Route::post('/borrow/{id}', [UserController::class, 'borrow']);

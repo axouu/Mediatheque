@@ -16,7 +16,9 @@ class Book extends Model
         'publication_date',
         'description',
         'author',
-        'genre'
+        'genre',
+        'borrowDate',
+        'confirmed'
     ];
 
     protected $dates = [

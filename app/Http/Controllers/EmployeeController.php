@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class EmployeeController extends Controller {
 
     public function confirm() {
         $books = Book::has('user')->where('confirmed', false)->get();
-        return view('book.confirm', ['books' => $books]);
+        return view('books.confirm', ['books' => $books]);
     }
 
     public function login(Request $request): RedirectResponse{
@@ -78,6 +79,8 @@ class EmployeeController extends Controller {
                 return redirect()->intended('/');
             }
             $book->user()->dissociate();
+            $book->borrowDate = null;
+            $book->confirmed = null;
             $book->save();
             return redirect()->intended('/admin/dashboard');
         }
@@ -90,6 +93,7 @@ class EmployeeController extends Controller {
             if (is_null($book)) {
                 return redirect()->intended('/');
             }
+            $book->borrowDate = Carbon::now();
             $book->confirmed = true;
             $book->save();
             return redirect()->intended('/admin/confirm');
